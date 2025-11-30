@@ -105,3 +105,70 @@ go run . - Exit with code 1 and print an error that not enough arguments were pr
 go run . login - Exit with code 1 and print an error that a username is required.
 go run . login alice - should set the current user in the config file to "alice" (and not overwrite the DB string)
 Run and submit the CLI tests from the root of your project.
+
+# 2.1 Postgres
+
+PostgreSQL is a production-ready, open-source database. It's a great choice for many web applications, and as a back-end engineer, it might be the single most important database to be familiar with.
+
+How Does PostgreSQL Work?
+Postgres, like most other database technologies, is itself a server. It listens for requests on a port (Postgres' default is :5432), and responds to those requests. To interact with Postgres, first you will install the server and start it. Then, you can connect to it using a client like psql or PGAdmin.
+
+Install Postgres v15 or later.
+macOS with brew
+
+brew install postgresql@15
+
+Linux / WSL (Debian). Here are the docs from Microsoft, but simply:
+
+sudo apt update
+sudo apt install postgresql postgresql-contrib
+
+Ensure the installation worked. The psql command-line utility is the default client for Postgres. Use it to make sure you're on version 15+ of Postgres:
+psql --version
+
+(Linux only) Update postgres password:
+sudo passwd postgres
+
+Enter a password, and be sure you won't forget it. You can just use something easy like postgres.
+
+Start the Postgres server in the background
+Mac: brew services start postgresql@15
+Linux: sudo service postgresql start
+Connect to the server. I recommend simply using the psql client. It's the "default" client for Postgres, and it's a great way to interact with the database. While it's not as user-friendly as a GUI like PGAdmin, it's a great tool to be able to do at least basic operations with.
+Enter the psql shell:
+
+Mac: psql postgres
+Linux: sudo -u postgres psql
+You should see a new prompt that looks like this:
+
+postgres=#
+
+Create a new database. I called mine gator:
+CREATE DATABASE gator;
+
+Connect to the new database:
+\c gator
+
+You should see a new prompt that looks like this:
+
+gator=#
+
+Set the user password (Linux only)
+ALTER USER postgres PASSWORD 'postgres';
+
+For simplicity, I used postgres as the password. Before, we altered the system user's password, now we're altering the database user's password.
+
+Query the database
+From here you can run SQL queries against the gator database. For example, to see the version of Postgres you're running, you can run:
+
+SELECT version();
+
+You can type exit to leave the psql shell.
+
+**important**
+
+psql "postgres://carlosinfante:@localhost:5432/gator"
+
+goose postgres "postgres://carlosinfante:@localhost:5432/gator" up
+
+
